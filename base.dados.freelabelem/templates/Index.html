@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload de Arquivo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0C0C0C;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #fff;
+            text-align: center;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            max-width: 800px;
+            margin-bottom: 10px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+            width: 100%;
+            text-align: left;
+        }
+        input[type="text"], input[type="number"], input[type="time"], input[type="file"] {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            text-align: center;
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .container {
+                max-width: 90%;
+                padding: 15px;
+            }
+            input[type="text"], input[type="number"], input[type="time"], input[type="file"] {
+                font-size: 14px;
+            }
+            input[type="submit"] {
+                font-size: 14px;
+            }
+            img {
+                max-width: 100%;
+            }
+        }
+        .file-selected {
+            display: none;
+            color: green;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        .success-message {
+            display: none;
+            color: green;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo no topo da página -->
+    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo">
+
+    <!-- Container do formulário -->
+    <div class="container">
+        <h2 style="color: #800080;">Preencha as informações do formulário: </h2>
+        <form id="uploadForm" action="/" method="post" enctype="multipart/form-data">
+            <label for="nome_completo">Nome Completo:</label>
+            <input type="text" id="nome_completo" name="nome_completo" placeholder="Nome Completo" required>
+
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" name="idade" placeholder="Idade" min="1" max="120" required>
+
+            <label for="telefone">Telefone:</label>
+            <input type="number" id="telefone" name="telefone" placeholder="telefone"  required>
+
+            <label for="especialidade">Especialidade:</label>
+            <input type="text" id="especialidade" name="especialidade" placeholder="Especialidade" required>
+
+            <label for="hora_disponivel">Hora Disponível para Trabalhar:</label>
+            <input type="text" id="hora_disponivel" name="hora_disponivel" required>
+
+            <label for="idade">Uma breve descrição sobre você:</label>
+            <input type="text" id="description" name="description" placeholder="description" min="1" max="120" required>
+
+            <label for="file">Selecione uma foto (profissional):</label>
+            <input type="file" id="file" name="file" required>
+            <span id="file-selected" class="file-selected">Arquivo selecionado!</span>
+            
+            <label for="taxa">
+                <input type="checkbox" id="taxa" name="taxa" required>
+                Você concorda com a taxa de 10% para o organizador da equipe de Freelancer?
+            </label>
+
+            <input type="submit" value="Enviar">
+        </form>
+        <div id="success-message" class="success-message">Seu formulário foi preenchido e enviado com sucesso, pode fechar esta página.</div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2025 TechNew. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        document.getElementById('file').addEventListener('change', function() {
+            var fileSelected = document.getElementById('file-selected');
+            if (this.files && this.files.length > 0) {
+                fileSelected.style.display = 'block';
+            } else {
+                fileSelected.style.display = 'none';
+            }
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    var successMessage = document.getElementById('success-message');
+                    successMessage.style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+        });
+    </script>
+</body>
+</html>
