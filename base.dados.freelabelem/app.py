@@ -34,7 +34,6 @@ def criar_banco_de_dados():
 criar_banco_de_dados()
 
 def salvar_dados(nome, idade, especialidade, hora, description, caminho_imagem):
-    """Salva os dados no banco de dados e insere a imagem corretamente."""
     pessoa = Pessoa(nome=nome, idade=idade, especialidade=especialidade,
                     hora_disponivel=hora, descricao=description, imagem=caminho_imagem)
     try:
